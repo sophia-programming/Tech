@@ -100,3 +100,6 @@ HTMLレスポンスを生成する方法（Goの標準ライブラリを使用�
 Go言語のテンプレートエンジンを使用するには二つの手順がある
 ①文字列、またはテンプレートファイルを解析してテンプレート構造体を生成（template.ParseFiles()使用）
 ②テンプレート構造体のExecuteメソッドを呼び出し、HTMLを生成
+
+https://github.com/danimal141/go-file-upload-app/blob/master/LICENSE
+これを参考に自分でも作って、他の機能を加えたり、デザインを変えたりしてみる
