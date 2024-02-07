@@ -12,7 +12,7 @@ import (
 	"text/template"
 )
 
-var templates = template.Must(template.ParseFiles("templates/index.html", "templates/show.html"))
+var templates = template.Must(template.ParseFiles("../templates/index.html", "../templates/show.html"))
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{"Title": "index"}
