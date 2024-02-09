@@ -1,4 +1,4 @@
-# go-file-upload-app
+# Diary-app
 A simple application for uploading images using Golang
 
 ## How to use
