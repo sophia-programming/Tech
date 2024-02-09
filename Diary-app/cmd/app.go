@@ -5,43 +5,12 @@ import (
 	"encoding/base64"
 	"image"
 	"image/jpeg"
-	"io"
 	"log"
 	"net/http"
 	"os"
 
-	"Tech/go-file-upload/pkg/handler"
+	"Tech/Diary-app/pkg/handler"
 )
-
-func UploadHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Allowed POST method only", http.StatusMethodNotAllowed)
-		return
-	}
-
-	err := r.ParseMultipartForm(32 << 20) // maxMemory
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	file, _, err := r.FormFile("upload")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer file.Close()
-
-	f, err := os.Create("/tmp/test.jpg")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer f.Close()
-
-	io.Copy(f, file)
-	http.Redirect(w, r, "/show", http.StatusFound)
-}
 
 func ShowHandler(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Open("/tmp/test.jpg")
@@ -77,7 +46,7 @@ func writeImageWithTemplate(w http.ResponseWriter, tmpl string, img *image.Image
 
 func main() {
 	http.HandleFunc("/", handler.IndexHandler)
-	http.HandleFunc("/upload", UploadHandler)
+	http.HandleFunc("/upload", handler.UploadHandler)
 	http.HandleFunc("/show", ShowHandler)
 	http.ListenAndServe(":8888", nil)
 }
