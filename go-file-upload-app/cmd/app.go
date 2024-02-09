@@ -9,15 +9,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"text/template"
+
+	"Tech/go-file-upload/pkg/handler"
 )
-
-var templates = template.Must(template.ParseFiles("../templates/index.html", "../templates/show.html"))
-
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	data := map[string]interface{}{"Title": "index"}
-	renderTemplate(w, "index", data)
-}
 
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
@@ -66,12 +60,6 @@ func ShowHandler(w http.ResponseWriter, r *http.Request) {
 	writeImageWithTemplate(w, "show", &img)
 }
 
-func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
-	if err := templates.ExecuteTemplate(w, tmpl+".html", data); err != nil {
-		log.Fatalln("Unable to execute template.")
-	}
-}
-
 func writeImageWithTemplate(w http.ResponseWriter, tmpl string, img *image.Image) {
 	buffer := new(bytes.Buffer)
 	if err := jpeg.Encode(buffer, *img, nil); err != nil {
@@ -84,11 +72,11 @@ func writeImageWithTemplate(w http.ResponseWriter, tmpl string, img *image.Image
 	//	}
 	str := base64.StdEncoding.EncodeToString(buffer.Bytes())
 	data := map[string]interface{}{"Title": tmpl, "Image": str}
-	renderTemplate(w, tmpl, data)
+	handler.RenderTemplate(w, tmpl, data)
 }
 
 func main() {
-	http.HandleFunc("/", IndexHandler)
+	http.HandleFunc("/", handler.IndexHandler)
 	http.HandleFunc("/upload", UploadHandler)
 	http.HandleFunc("/show", ShowHandler)
 	http.ListenAndServe(":8888", nil)
