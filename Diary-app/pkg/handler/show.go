@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"image"
-	"image/jpeg"
+	"image/png"
 	"log"
 	"net/http"
 	"os"
@@ -29,14 +29,14 @@ func ShowHandler(w http.ResponseWriter, r *http.Request) {
 
 func writeImageWithTemplate(w http.ResponseWriter, tmpl string, img *image.Image) {
 	buffer := new(bytes.Buffer)
-	if err := jpeg.Encode(buffer, *img, nil); err != nil {
+	if err := png.Encode(buffer, *img); err != nil {
 		log.Fatalln("Unable to encode image.")
 	}
-	//	w.Header().Set("Content-Type", "image/jpeg")
-	//	w.Header().Set("Content-Length", strconv.Itoa(len(buffer.Bytes())))
-	//	if _, err := w.Write(buffer.Bytes()); err != nil {
-	//		log.Println("unable to write image.")
-	//	}
+	//w.Header().Set("Content-Type", "image/png")
+	//w.Header().Set("Content-Length", strconv.Itoa(len(buffer.Bytes())))
+	//if _, err := w.Write(buffer.Bytes()); err != nil {
+	//	log.Println("unable to write image.")
+	//}
 	str := base64.StdEncoding.EncodeToString(buffer.Bytes())
 	data := map[string]interface{}{"Title": tmpl, "Image": str}
 	RenderTemplate(w, tmpl, data)
