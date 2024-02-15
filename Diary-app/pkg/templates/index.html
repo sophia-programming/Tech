@@ -5,9 +5,12 @@
     <title>{{ .Title |html }}</title>
   </head>
   <body>
-    <form action="/upload" enctype="multipart/form-data" method="post">
-      <input type="file" name="upload" id="upload" multiple="multiple">
-      <input type="submit" value="Upload file" />
-    </form>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <label for="upload">Select file:</label>
+    <input type="file" id="upload" name="upload"><br>
+    <input type="checkbox" id="resize" name="resize" value="yes">
+    <label for="resize">resize</label><br>
+    <input type="submit" value="Upload file">
+  </form>
   </body>
 </html>
