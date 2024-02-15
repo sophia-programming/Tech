@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"image"
+	"image/png"
 	"io"
 	"net/http"
 	"os"
+
+	"Tech/Diary-app/pkg/model"
 )
 
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -25,12 +29,25 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	f, err := os.Create("/tmp/test.jpg")
+	img, _, err := image.Decode(file)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	resizedImg := model.ResizeImage(img, 100, 100) //新しいサイズ指定
+
+	f, err := os.Create("/tmp/resized_image.png")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer f.Close()
+
+	if err := png.Encode(f, resizedImg); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	io.Copy(f, file)
 	http.Redirect(w, r, "/show", http.StatusFound)
