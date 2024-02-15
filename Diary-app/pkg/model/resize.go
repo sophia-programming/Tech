@@ -8,7 +8,7 @@ import (
 
 func ResizeImage(src image.Image, width, height int) image.Image {
 	dst := image.NewRGBA(image.Rect(0, 0, width, height))
-	draw.ApproxBiLinear.Scale(dst, dst.Bounds(), src, src.Bounds(), draw.Over, nil)
+	draw.CatmullRom.Scale(dst, dst.Bounds(), src, src.Bounds(), draw.Over, nil)
 	return dst
 }
 
@@ -35,4 +35,3 @@ func ResizeImage(src image.Image, width, height int) image.Image {
 //		log.Fatalln(err)
 //	}
 //}
-//

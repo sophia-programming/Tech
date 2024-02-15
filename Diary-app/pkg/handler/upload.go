@@ -35,7 +35,9 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resizedImg := model.ResizeImage(img, 100, 100) //新しいサイズ指定
+	if r.FormValue("resize") == "yes" {
+		img = model.ResizeImage(img, 400, 400) //新しいサイズ指定
+	}
 
 	f, err := os.Create("/tmp/resized_image.png")
 	if err != nil {
@@ -44,7 +46,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer f.Close()
 
-	if err := png.Encode(f, resizedImg); err != nil {
+	if err := png.Encode(f, img); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

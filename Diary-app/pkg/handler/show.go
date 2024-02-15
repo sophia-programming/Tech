@@ -11,7 +11,7 @@ import (
 )
 
 func ShowHandler(w http.ResponseWriter, r *http.Request) {
-	file, err := os.Open("/tmp/test.jpg")
+	file, err := os.Open("/tmp/test.png")
 	defer file.Close()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
